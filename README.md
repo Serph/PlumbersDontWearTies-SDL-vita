@@ -1,4 +1,23 @@
-# Plumbers Don't Wear Ties - SDL2
+# PlayStation Vita port of Plumbers Don't Wear Ties - SDL2 (https://github.com/MaikelChan/PlumbersDontWearTies-SDL)
+
+## Description 
+Plumbers Don't Wear Ties is an adult-oriented "romantic comedy" visual novel/dating sim developed by United Pixtures and published by Kirin Entertainment for the 3DO Interactive Multiplayer. Although the game did have a DOS version, it had very limited distribution and was published by United Pixtures itself. The game stars Edward J. Foster and Jeanne Basone as John and Jane, respectively; two people who are being pressured by their respective parents to go out and find a spouse. The player's task is to get John and Jane together. 
+
+## Install
+Install PlumbersDontWearTies.vpk to your Vita.
+
+Plumbers Don't Wear Ties requires the original data files from the PC version of the game.
+
+Copy all the folders included in the PC version (SC1, SC2, SC3...), and GAME.BIN and SHOWTIME.EXE files into "ux0:data/PlumbersDontWearTies".
+
+## Controls
+- △ - Select first option in a choice selection screen
+- □ - Select second option in a choice selection screen
+- × - Select third option in a choice selection screen
+- SELECT - Exit the game
+- D-Pad right - Advance to the next picture
+
+# Plumbers Don't Wear Ties - SDL2 - Original README
 
 This project is my own implementation of the game `Plumbers Don't Wear Ties` written from scratch, that is, the original program has not been decompiled or reverse-engineered. However, the game still needs the assets from the original PC version to run. The only thing that has been reverse-engineered is the `GAME.BIN` file, done by [Daniel Marschall](https://misc.daniel-marschall.de/spiele/plumbers/?page=pc_gamebin), which contains information about the scenes, background images, sounds and sequences of events.
 
