@@ -17,6 +17,8 @@ Copy all the folders included in the PC version (SC1, SC2, SC3...), and GAME.BIN
 - SELECT - Exit the game
 - D-Pad right - Advance to the next picture
 
+Thank you very much to MaikelChan for making the original implementation, I started this port to learn a bit about how the Vita works and to have some fun in the meantime.
+
 # Plumbers Don't Wear Ties - SDL2 - Original README
 
 This project is my own implementation of the game `Plumbers Don't Wear Ties` written from scratch, that is, the original program has not been decompiled or reverse-engineered. However, the game still needs the assets from the original PC version to run. The only thing that has been reverse-engineered is the `GAME.BIN` file, done by [Daniel Marschall](https://misc.daniel-marschall.de/spiele/plumbers/?page=pc_gamebin), which contains information about the scenes, background images, sounds and sequences of events.
