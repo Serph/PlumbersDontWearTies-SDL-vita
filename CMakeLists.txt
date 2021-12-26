@@ -1,35 +1,82 @@
-﻿# CMakeList.txt : Top-level CMake project file, do global configuration
-# and include sub-projects here.
+# CMakeList.txt : CMake project for PlumbersDontWearTies, include source and define
+# project specific logic here.
+#
+cmake_minimum_required(VERSION 2.8)
 
-cmake_minimum_required (VERSION 3.8)
+include("${VITASDK}/share/vita.cmake" REQUIRED)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+set(VITA_APP_NAME "Plumbers Don't Wear Ties")
+set(VITA_TITLEID  "PDWT00001")
+set(VITA_VERSION  "01.00")
 
-set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_LIST_DIR}/resources.rc")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-project ("PlumbersDontWearTies" VERSION "0.1.0")
+include_directories(
+  ../common
+)
 
-configure_file("${CMAKE_CURRENT_LIST_DIR}/PlumbersDontWearTies/config.h.in" "${CMAKE_CURRENT_LIST_DIR}/PlumbersDontWearTies/config.h")
+# Add source to this project's executable.
+add_executable (${PROJECT_NAME}
+    "PlumbersDontWearTies/Game.cpp"
+    "PlumbersDontWearTies/Game.h"
+    "PlumbersDontWearTies/GameData.h"
+    "PlumbersDontWearTies/main.cpp"
+    "PlumbersDontWearTies/main.h"
+)
+
+target_link_libraries(${PROJECT_NAME}
+  SDL2
+  SDL_ttf
+  freetype
+  png
+  SceDisplay_stub
+  SceCtrl_stub
+  SceAudio_stub
+  SceSysmodule_stub
+  SceGxm_stub
+  SceCommonDialog_stub
+  SceAppMgr_stub
+  SceTouch_stub
+  SceHid_stub
+  SceMotion_stub
+  m
+  z
+)
+
+# Copy necessary files to output
 
 if(MSVC)
-    set(SDL2_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/SDL2/include)
-
-    if(CMAKE_SIZEOF_VOID_P EQUAL 8) # 64 bits
-        set(SDL2_LIB_DIRS ${CMAKE_CURRENT_LIST_DIR}/SDL2/lib/x64)
-    else() # 32 bits
-        set(SDL2_LIB_DIRS ${CMAKE_CURRENT_LIST_DIR}/SDL2/lib/x86)
-    endif()
-
-    set(SDL2_LIBS SDL2main SDL2 SDL2_ttf)
-
-    link_directories(${SDL2_LIB_DIRS})
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL2_LIB_DIRS}/SDL2.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL2_LIB_DIRS}/SDL2_ttf.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${SDL2_LIB_DIRS}/libfreetype-6.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/Data
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_LIST_DIR}/Font.ttf" $<TARGET_FILE_DIR:${PROJECT_NAME}>/Data
+    )
 else()
-    find_package(SDL2 REQUIRED)
-    set(SDL2_LIBS SDL2 SDL2_ttf)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/Data
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_LIST_DIR}/Font.ttf" $<TARGET_FILE_DIR:${PROJECT_NAME}>/Data
+    )
 endif()
 
-include_directories(${SDL2_INCLUDE_DIRS})
+# TODO: Add tests and install targets if needed.
 
-# Include sub-projects.
-add_subdirectory ("PlumbersDontWearTies")
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  if(DEFINED ENV{VITASDK})
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
+  else()
+    message(FATAL_ERROR "Please define VITASDK to point to your SDK path!")
+  endif()
+endif()
+
+vita_create_self(${PROJECT_NAME}.self ${PROJECT_NAME})
+vita_create_vpk(${PROJECT_NAME}.vpk ${VITA_TITLEID} ${PROJECT_NAME}.self
+  VERSION ${VITA_VERSION}
+  NAME ${VITA_APP_NAME}
+  FILE sce_sys/icon0.png sce_sys/icon0.png
+  FILE sce_sys/livearea/contents/bg.png sce_sys/livearea/contents/bg.png
+  FILE sce_sys/livearea/contents/startup.png sce_sys/livearea/contents/startup.png
+  FILE sce_sys/livearea/contents/template.xml sce_sys/livearea/contents/template.xml
+)

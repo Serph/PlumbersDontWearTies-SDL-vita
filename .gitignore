@@ -14,8 +14,16 @@ _deps
 .vs/
 bin/
 build/
+.vscode/
 
 CMakeSettings.json
 
 # Dependencies
 SDL2/
+
+*.o
+*.elf
+*.velf
+*.bin
+*.vpk
+*.sfo

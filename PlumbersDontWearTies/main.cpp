@@ -1,5 +1,9 @@
+#include <psp2/kernel/processmgr.h>
+#include <psp2/ctrl.h>
+#include <psp2/touch.h>
+#include <psp2/audioout.h>
+
 #include "main.h"
-#include "config.h"
 
 #include <iostream>
 
@@ -15,8 +19,7 @@ int main(int argc, char** args)
 
 	// Create window
 
-	std::string title = "Plumbers Don't Wear Ties - v";
-	SDL_Window* window = SDL_CreateWindow(title.append(PROJECT_VER).c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 960, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	SDL_Window* window = SDL_CreateWindow("Plumbers Don't Wear Ties", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 960, 544, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if (window == nullptr)
 	{
@@ -98,13 +101,13 @@ int main(int argc, char** args)
 						case SDL_CONTROLLER_BUTTON_BACK:
 							game->Stop();
 							break;
-						case SDL_CONTROLLER_BUTTON_X:
+						case SDL_CONTROLLER_BUTTON_Y:
 							game->SelectDecision(0);
 							break;
-						case SDL_CONTROLLER_BUTTON_Y:
+						case SDL_CONTROLLER_BUTTON_X:
 							game->SelectDecision(1);
 							break;
-						case SDL_CONTROLLER_BUTTON_B:
+						case SDL_CONTROLLER_BUTTON_A:
 							game->SelectDecision(2);
 							break;
 						case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
@@ -176,6 +179,7 @@ int main(int argc, char** args)
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
+	sceKernelExitProcess(0);
 	return 0;
 }
 
